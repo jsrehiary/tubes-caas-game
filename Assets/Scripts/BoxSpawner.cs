@@ -5,15 +5,15 @@ public class Spawner : MonoBehaviour
     public GameObject[] daftarGatePrefab; 
     
     [Header("Pengaturan Waktu")]
-    public float minInterval = 1f;  // Detik paling cepat
-    public float maxInterval = 15f; // Detik paling lama
+    public float minInterval = 1f;  // min delay
+    public float maxInterval = 15f; // max delay
     
     private float timer;
     private float nextSpawnTime;
 
     void Start()
     {
-        // Tentukan waktu spawn pertama kali saat game dimulai
+        // waktu spawn pas game dimulai
         SetRandomNextSpawn();
     }
 
@@ -25,7 +25,7 @@ public class Spawner : MonoBehaviour
         {
             SpawnRandomGate();
             
-            // Setelah spawn, reset timer dan tentukan waktu acak baru
+            // RNGnya
             timer = 0;
             SetRandomNextSpawn();
         }
@@ -33,7 +33,7 @@ public class Spawner : MonoBehaviour
 
     void SetRandomNextSpawn()
     {
-        // Menghasilkan angka acak antara 1 sampai 15 (sesuai input di Inspector)
+        // RNG dari minInterval dan maxInterval
         nextSpawnTime = Random.Range(minInterval, maxInterval);
     }
 

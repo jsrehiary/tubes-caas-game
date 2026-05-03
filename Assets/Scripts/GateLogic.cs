@@ -1,87 +1,172 @@
+using TMPro;
 using UnityEngine;
 
 public class GateLogic : MonoBehaviour
 {
-    public enum GateType { Tambah, Kurang, Kali, Bagi }
-    
-    [Header("RNG Settings")]
-    public GateType tipeGerbang;
-    public int nilaiOperasi;
+    public enum GateType
+    {
+        Tambah,
+        Kurang,
+        Kali,
+        Bagi
+    }
+
+    [Header("Gate Settings")]
+    [SerializeField] private bool useRandomValue = true;
+    [SerializeField] private GateType tipeGerbang;
+    [SerializeField] private int nilaiOperasi;
 
     [Header("Movement")]
-    public float moveSpeed = 10f;
-    private bool sudahDiklaim = false;
+    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float destroyZPosition = -20f;
 
-    // Komponen untuk memastikan visual tetap terang
+    [Header("UI")]
+    [SerializeField] private TextMeshPro valueText;
+
+    [Header("Visual Colors")]
+    [SerializeField] private Color tambahColor = new Color(0.1f, 0.9f, 0.35f);
+    [SerializeField] private Color kurangColor = new Color(1f, 0.2f, 0.2f);
+    [SerializeField] private Color kaliColor = new Color(0.2f, 0.6f, 1f);
+    [SerializeField] private Color bagiColor = new Color(1f, 0.75f, 0.1f);
+
+    private bool sudahDiklaim = false;
     private SpriteRenderer spriteRenderer;
 
-    void Start()
+    private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        
-        if (spriteRenderer != null)
+
+        if (useRandomValue)
         {
-            // Tetap paksa pakai Shader Unlit agar tidak gelap
-            // Tapi kita tidak akan menyentuh bagian .color-nya
-            spriteRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            SetupGateRNG();
         }
 
-        SetupGateRNG();
-}
+        UpdateGateUI();
+        UpdateGateVisual();
+    }
 
-    void SetupGateRNG()
+    private void SetupGateRNG()
     {
-        // Acak tipenya (0=Tambah, 1=Kurang, 2=Kali, 3=Bagi)
         tipeGerbang = (GateType)Random.Range(0, 4);
 
-        // Tentukan nilainya saja, TANPA mengubah warna (Gambling)
         switch (tipeGerbang)
         {
             case GateType.Tambah:
                 nilaiOperasi = Random.Range(1, 51);
                 break;
+
             case GateType.Kurang:
                 nilaiOperasi = Random.Range(1, 51);
                 break;
+
             case GateType.Kali:
                 nilaiOperasi = Random.Range(2, 5);
                 break;
+
             case GateType.Bagi:
                 nilaiOperasi = Random.Range(2, 4);
                 break;
         }
     }
 
-    void Update()
+    private void Update()
     {
-        // Balok bergerak mendekati player
-        transform.Translate(Vector3.back * moveSpeed * Time.deltaTime);
+        transform.position += Vector3.back * moveSpeed * Time.deltaTime;
 
-        // Hancurkan jika sudah lewat belakang player
-        if (transform.position.z < -20f)
+        if (transform.position.z < destroyZPosition)
         {
             Destroy(gameObject);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void UpdateGateUI()
     {
-        // Deteksi tabrakan dengan Player
-        if (other.CompareTag("Player") && !sudahDiklaim)
-        {
-            // Cari script PlayerController di parent atau objek itu sendiri
-            PlayerController playerScript = other.GetComponentInParent<PlayerController>();
+        if (valueText == null) return;
 
-            if (playerScript != null)
-            {
-                sudahDiklaim = true;
-                
-                // Jalankan logika matematika ke player
-                playerScript.ExecuteGateLogic(tipeGerbang, nilaiOperasi);
-                
-                // Hilangkan balok setelah ditabrak
-                gameObject.SetActive(false);
-            }
+        valueText.text = GetDisplayText();
+        valueText.color = GetGateColor();
+    }
+
+    private void UpdateGateVisual()
+    {
+        if (spriteRenderer == null) return;
+
+        spriteRenderer.color = GetGateColor();
+    }
+
+    private string GetDisplayText()
+    {
+        switch (tipeGerbang)
+        {
+            case GateType.Tambah:
+                return "+" + nilaiOperasi;
+
+            case GateType.Kurang:
+                return "-" + nilaiOperasi;
+
+            case GateType.Kali:
+                return "x" + nilaiOperasi;
+
+            case GateType.Bagi:
+                return "÷" + nilaiOperasi;
+
+            default:
+                return nilaiOperasi.ToString();
         }
     }
+
+    private Color GetGateColor()
+    {
+        switch (tipeGerbang)
+        {
+            case GateType.Tambah:
+                return tambahColor;
+
+            case GateType.Kurang:
+                return kurangColor;
+
+            case GateType.Kali:
+                return kaliColor;
+
+            case GateType.Bagi:
+                return bagiColor;
+
+            default:
+                return Color.white;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (sudahDiklaim) return;
+        if (!other.CompareTag("Player")) return;
+
+        PlayerController playerScript = other.GetComponentInParent<PlayerController>();
+
+        if (playerScript == null)
+        {
+            Debug.LogWarning("PlayerController tidak ditemukan di Player atau parent-nya.");
+            return;
+        }
+
+        sudahDiklaim = true;
+
+        playerScript.ExecuteGateLogic(tipeGerbang, nilaiOperasi);
+
+        // Optional: panggil floating text HUD jika nanti sudah ada
+        // HUDController.Instance?.SpawnFloatingText(GetDisplayText(), transform.position, FeedbackType.Positive);
+
+        gameObject.SetActive(false);
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (!Application.isPlaying)
+        {
+            UpdateGateUI();
+            UpdateGateVisual();
+        }
+    }
+#endif
 }
