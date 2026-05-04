@@ -20,7 +20,6 @@ public class GateLogic : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Tetap paksa Material Unlit agar balok tidak hitam/gelap
         if (spriteRenderer != null)
         {
             spriteRenderer.material = new Material(Shader.Find("Sprites/Default"));

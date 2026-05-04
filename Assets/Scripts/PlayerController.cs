@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Pergerakan Player Utama")]
     public float laneSpeed = 10f;
-    public float xLimit = 8f; // Lebar jalan total (sesuaikan dengan floor kamu)
+    public float xLimit = 8f; //
 
     [Header("Pengaturan Kerumunan Masif")]
     public GameObject soldierPrefab;
@@ -21,10 +21,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // 1. Gerakkan Player Utama (Instan mengikuti Input A/D)
         MoverPlayer();
 
-        // 2. Gerakkan Pasukan (Mengikuti secara halus dengan batasan jalan)
         MoveMassiveCrowd();
     }
 
