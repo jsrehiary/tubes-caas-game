@@ -7,14 +7,13 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        // Memanggil fungsi Spawn setiap interval
+        //manggil fungsi spawn dr interval
         InvokeRepeating("SpawnEnemy", 1f, spawnInterval);
     }
 
     void SpawnEnemy()
     {
-        // Menggunakan posisi objek Spawner ini sebagai titik lahir
-        // Posisi X akan diacak otomatis oleh script EnemyBehavior nanti
+        // posisi dr objek spawn, x acak
         Vector3 spawnPos = transform.position; 
         
         Instantiate(enemyPrefab, spawnPos, Quaternion.identity);

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ffc54368d6cb058448228fea31dade76
+guid: b88dad22125ceb140afd0fddc842f387
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Tralala
-    second: {fileID: 2100000, guid: d36c949862988ad4fa19c3c74e2be464, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: dd558dd6531959845a20b06a07d22fb6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -27,7 +27,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -88,27 +88,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton:
-    - name: Low(Clone)
-      parentName: 
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: teath1
-      parentName: Low(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.75709856, y: 1.1523884e-17, z: -1.1523886e-17, w: 0.6533007}
-      scale: {x: 100, y: 100, z: 100}
-    - name: teath2
-      parentName: Low(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.75709856, y: 1.1523884e-17, z: -1.1523886e-17, w: 0.6533007}
-      scale: {x: 100, y: 100, z: 100}
-    - name: tralala
-      parentName: Low(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+    skeleton: []
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -119,7 +99,7 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
