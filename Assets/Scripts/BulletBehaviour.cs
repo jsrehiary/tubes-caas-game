@@ -2,27 +2,45 @@ using UnityEngine;
 
 public class BulletBehaviour : MonoBehaviour
 {
-    public float speed = 10f;
-    public float lifeTime = 3f;
+    [Header("Movement")]
+    public float speed = 20f;
+    public Vector3 direction = Vector3.back;
+
+    [Header("Combat")]
     public int damage = 1;
 
-    void Start()
+    [Header("Lifetime")]
+    public float lifeTime = 3f;
+
+    void OnEnable()
     {
-        Destroy(gameObject, lifeTime);
+        // penting kalau nanti pakai object pooling
+        CancelInvoke();
+        Invoke(nameof(DestroySelf), lifeTime);
     }
 
     void Update()
     {
-        // transform Translate(Vector2.up * speed * Time.deltaTime);
+        transform.Translate(direction * speed * Time.deltaTime, Space.World);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter(Collider other)
     {
-        // if (other.CompareTag("Enemy"))
-        // {
-        //     other.GetComponent<Enemy>()?.TakeDamage(damage);
+        if (other.CompareTag("Enemy"))
+        {
+            // kasih damage ke enemy
+            // var enemy = other.GetComponent<Enemy>();
+            // if (enemy != null)
+            // {
+            //     enemy.TakeDamage(damage);
+            // }
 
-        //     Destroy(gameObject);
-        // }
+            DestroySelf();
+        }
+    }
+
+    void DestroySelf()
+    {
+        Destroy(gameObject);
     }
 }
