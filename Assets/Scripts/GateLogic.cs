@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class GateLogic : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class GateLogic : MonoBehaviour
     [SerializeField] private bool useRandomValue = true;
     [SerializeField] private GateType tipeGerbang;
     [SerializeField] private int nilaiOperasi;
+
+    [Header("Text")]
+    [SerializeField] private TMP_Text valueText;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 10f;
@@ -29,6 +33,8 @@ public class GateLogic : MonoBehaviour
         {
             SetupGateRNG();
         }
+
+        UpdateValueText();
     }
 
     private void SetupGateRNG()
@@ -37,16 +43,59 @@ public class GateLogic : MonoBehaviour
 
         switch (tipeGerbang)
         {
-            case GateType.Tambah: nilaiOperasi = Random.Range(1, 51); break;
-            case GateType.Kurang: nilaiOperasi = Random.Range(1, 51); break;
-            case GateType.Kali: nilaiOperasi = Random.Range(2, 5); break;
-            case GateType.Bagi: nilaiOperasi = Random.Range(2, 4); break;
+            case GateType.Tambah:
+                nilaiOperasi = Random.Range(1, 51);
+                break;
+
+            case GateType.Kurang:
+                nilaiOperasi = Random.Range(1, 51);
+                break;
+
+            case GateType.Kali:
+                nilaiOperasi = Random.Range(2, 5);
+                break;
+
+            case GateType.Bagi:
+                nilaiOperasi = Random.Range(2, 4);
+                break;
+        }
+    }
+
+    private void UpdateValueText()
+    {
+        if (valueText == null)
+        {
+            valueText = GetComponentInChildren<TextMeshPro>();
+        }
+
+        if (valueText == null)
+        {
+            Debug.LogWarning("ValueText belum dipasang pada obstacle: " + gameObject.name, this);
+            return;
+        }
+
+        switch (tipeGerbang)
+        {
+            case GateType.Tambah:
+                valueText.text = "+" + nilaiOperasi;
+                break;
+
+            case GateType.Kurang:
+                valueText.text = "-" + nilaiOperasi;
+                break;
+
+            case GateType.Kali:
+                valueText.text = "x" + nilaiOperasi;
+                break;
+
+            case GateType.Bagi:
+                valueText.text = "/" + nilaiOperasi;
+                break;
         }
     }
 
     private void Update()
     {
-        // Pergerakan balok ke arah Z negatif
         transform.position += Vector3.back * moveSpeed * Time.deltaTime;
 
         if (transform.position.z < destroyZPosition)

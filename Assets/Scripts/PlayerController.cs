@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
+    [Header("HUD")]
+    [SerializeField] private TMP_Text squadText;
+
     private bool isGameOver;
 
     private readonly List<GameObject> armyList = new List<GameObject>();
@@ -44,6 +48,7 @@ public class PlayerController : MonoBehaviour
         }
 
         currentArmyCount = armyList.Count;
+        UpdateSquadText();
         CheckGameOver();
     }
 
@@ -129,6 +134,7 @@ public class PlayerController : MonoBehaviour
         }
 
         currentArmyCount = armyList.Count;
+        UpdateSquadText();
         CheckGameOver();
     }
 
@@ -144,6 +150,7 @@ public class PlayerController : MonoBehaviour
         RemoveSoldiers(damage);
 
         currentArmyCount = armyList.Count;
+        UpdateSquadText();
         CheckGameOver();
     }
 
@@ -175,6 +182,7 @@ public class PlayerController : MonoBehaviour
         }
 
         currentArmyCount = armyList.Count;
+        UpdateSquadText();
         CheckGameOver();
     }
 
@@ -209,6 +217,15 @@ public class PlayerController : MonoBehaviour
         }
 
         currentArmyCount = armyList.Count;
+        UpdateSquadText();
+    }
+
+    private void UpdateSquadText()
+    {
+        if (squadText != null)
+        {
+            squadText.text = currentArmyCount.ToString();
+        }
     }
 
     private void CheckGameOver()
@@ -224,6 +241,8 @@ public class PlayerController : MonoBehaviour
     private void TriggerGameOver()
     {
         isGameOver = true;
+
+        UpdateSquadText();
 
         if (gameOverPanel != null)
         {

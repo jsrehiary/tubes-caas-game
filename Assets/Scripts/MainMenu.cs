@@ -3,9 +3,23 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Scene")]
+    [SerializeField] private string gameSceneName = "GameScene";
+
     public void PlayGame()
     {
-        SceneManager.LoadScene("GameScene");   
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(gameSceneName);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Exit Game clicked");
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }
