@@ -49,23 +49,26 @@ public class BulletBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Bullet kena: " + other.name + " | Tag: " + other.tag);
-
         if (hasHit) return;
-        if (!other.CompareTag("Enemy")) return;
+
+        // Abaikan player/soldier sendiri.
+        if (other.GetComponentInParent<PlayerController>() != null)
+        {
+            return;
+        }
+
+        // Ambil enemy dari object yang kena atau parent-nya.
+        EnemyBehavior enemy = other.GetComponentInParent<EnemyBehavior>();
+
+        // Kalau bukan enemy, abaikan. Contoh: obstacle, ground, gate, dll.
+        if (enemy == null)
+        {
+            return;
+        }
 
         hasHit = true;
 
-        EnemyBehavior enemy = other.GetComponentInParent<EnemyBehavior>();
-
-        if (enemy != null)
-        {
-            enemy.TakeDamage(damage);
-        }
-        else
-        {
-            Debug.LogWarning("Object bertag Enemy tidak punya EnemyBehavior di parent: " + other.name);
-        }
+        enemy.TakeDamage(damage);
 
         Destroy(gameObject);
     }

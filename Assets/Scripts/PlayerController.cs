@@ -46,6 +46,10 @@ public class PlayerController : MonoBehaviour
         {
             RegisterSoldier(initialSoldier, isInitial: true);
         }
+        else
+        {
+            Debug.LogWarning("Initial Soldier belum di-assign di PlayerController!", this);
+        }
 
         currentArmyCount = armyList.Count;
         UpdateSquadText();
@@ -141,6 +145,27 @@ public class PlayerController : MonoBehaviour
     public int GetArmyCount()
     {
         return currentArmyCount;
+    }
+
+    public List<Transform> GetActiveFirePoints()
+    {
+        List<Transform> firePoints = new List<Transform>();
+
+        for (int i = 0; i < armyList.Count; i++)
+        {
+            GameObject soldier = armyList[i];
+
+            if (soldier == null) continue;
+
+            Transform firePoint = soldier.transform.Find("FirePoint");
+
+            if (firePoint != null)
+            {
+                firePoints.Add(firePoint);
+            }
+        }
+
+        return firePoints;
     }
 
     public void TakeArmyDamage(int damage)
