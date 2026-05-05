@@ -4,7 +4,7 @@ public class BulletBehaviour : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 20f;
-    public Vector3 direction = Vector3.forward;
+    public Vector3 direction = Vector3.back;
 
     [Header("Combat")]
     public int damage = 1;
